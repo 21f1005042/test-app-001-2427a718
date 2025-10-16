@@ -1,21 +1,32 @@
-document.getElementById('add').addEventListener('click', function() {
-    const num1 = parseFloat(document.getElementById('num1').value);
-    const num2 = parseFloat(document.getElementById('num2').value);
-    if (!isNaN(num1) && !isNaN(num2)) {
-        const result = num1 + num2;
-        document.getElementById('result').textContent = 'Result: ' + result;
-    } else {
-        document.getElementById('result').textContent = 'Please enter valid numbers!';
-    }
-});
+let currentInput = '';
+let history = [];
 
-document.getElementById('subtract').addEventListener('click', function() {
-    const num1 = parseFloat(document.getElementById('num1').value);
-    const num2 = parseFloat(document.getElementById('num2').value);
-    if (!isNaN(num1) && !isNaN(num2)) {
-        const result = num1 - num2;
-        document.getElementById('result').textContent = 'Result: ' + result;
-    } else {
-        document.getElementById('result').textContent = 'Please enter valid numbers!';
+function appendToDisplay(value) {
+    currentInput += value;
+    document.getElementById('display').value = currentInput;
+}
+
+function clearInput() {
+    currentInput = '';
+    document.getElementById('display').value = currentInput;
+}
+
+function allClear() {
+    currentInput = '';
+    history = [];
+    document.getElementById('display').value = currentInput;
+    document.getElementById('history').innerHTML = '';
+}
+
+function calculate() {
+    try {
+        const result = eval(currentInput.replace('×', '*').replace('÷', '/'));
+        history.push(`${currentInput} = ${result}`);
+        document.getElementById('history').innerHTML = history.map(item => `<li>${item}</li>`).join('');
+        currentInput = result.toString();
+        document.getElementById('display').value = currentInput;
+    } catch (error) {
+        alert('Invalid calculation!');
+        clearInput();
     }
-});
+}
